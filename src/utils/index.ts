@@ -19,18 +19,6 @@ export const useMount =(callback:()=>void)=>{
         callback&&callback()
     },[])
 }
-//自定义事件节流hook
-// const debounce = (func,delay)=>{
-//     let timeout;
-//     return (...param)=>{
-//         if (timeout) {
-//             clearTimeout(timeout)
-//         }
-//         timeout = setTimeout(function(){
-//             func(...param)
-//         },delay)
-//     }
-// }
 
 //自定义hook
 export const useDebounce = <V>(value:V,delay?:number)=>{
