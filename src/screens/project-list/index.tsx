@@ -1,30 +1,24 @@
 import React from "react";
-import { useEffect, useState } from "react";
-import { cleanObject, useMount, useDebounce } from "utils";
+import {  useState } from "react";
+import {  useDebounce } from "utils";
 import { SearchPanel } from "./search-panel";
-import { List } from "./list";
-import { useHttp } from "utils/http";
+import { List} from "./list";
 import styled from "@emotion/styled";
+import { useProjects } from "utils/project";
+import { useUsers } from "utils/user";
 export const ProjectListScreen = () => {
-  const [users, setUsers] = useState([]);
   const [param, setParam] = useState({
     name: "",
     personId: "",
   });
   const debouncedParam = useDebounce(param, 200);
-  const [list, setList] = useState([]);
-  const client = useHttp();
-  useEffect(() => {
-    client("projects", { data: cleanObject(debouncedParam) }).then(setList);
-  }, [debouncedParam]);
-  useMount(() => {
-    client("users").then(setUsers);
-  });
+  const { isLoading, error ,data:list} = useProjects(debouncedParam);
+  const {data:users} = useUsers()
   return (
     <Container>
-        <h1>项目列表</h1>
-      <SearchPanel param={param} setParam={setParam} users={users} />
-      <List list={list} users={users} />
+      <h1>项目列表</h1>
+      <SearchPanel param={param} setParam={setParam} users={users||[]} />
+      <List dataSource={list||[]} users={users||[]} />
     </Container>
   );
 };
